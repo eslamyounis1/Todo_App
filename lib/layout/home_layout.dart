@@ -210,10 +210,7 @@ class _HomeLayoutState extends State<HomeLayout> {
       ),
     );
   }
-
-  Future<String> getName() async {
-    return 'Eslam Younis';
-  }
+  
 
   void createDatabase() async {
     database = await openDatabase(
