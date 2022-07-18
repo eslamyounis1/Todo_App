@@ -163,7 +163,12 @@ class _HomeLayoutState extends State<HomeLayout> {
                 ),
               ),
               elevation: 20.0,
-            );
+            ).closed.then((value){
+              isBottomSheetShown = false;
+              setState(() {
+                fabIcon = Icons.edit;
+              });
+            });
             isBottomSheetShown = true;
             setState(() {
               fabIcon = Icons.add;
