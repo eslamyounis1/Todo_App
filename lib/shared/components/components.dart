@@ -44,3 +44,40 @@ Widget defaultFormField({
         return validate(value);
       },
     );
+
+Widget buildTaskItem() => Padding(
+  padding: const EdgeInsets.all(20.0),
+  child: Row(
+    children: [
+      const CircleAvatar(
+        radius: 40.0,
+        child: Text(
+          '02:00 PM',
+        ),
+      ),
+      const SizedBox(
+        width: 20.0,
+      ),
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Text(
+            'Task Title',
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+
+            ),
+          ),
+          Text(
+            '19 Jul, 2022',
+            style: TextStyle(
+              color: Colors.grey,
+
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+);

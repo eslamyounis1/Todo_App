@@ -38,6 +38,8 @@ class _HomeLayoutState extends State<HomeLayout> {
   var timeController = TextEditingController();
   var dateController = TextEditingController();
 
+  List<Map> tasks = [];
+
   @override
   void initState() {
     super.initState();
@@ -210,7 +212,7 @@ class _HomeLayoutState extends State<HomeLayout> {
       ),
     );
   }
-  
+
 
   void createDatabase() async {
     database = await openDatabase(
@@ -228,7 +230,12 @@ class _HomeLayoutState extends State<HomeLayout> {
           print('Error when creating Table ${error.toString()}');
         });
       },
-      onOpen: (database) {
+      onOpen: (database)
+      {
+        getDataFromDatabase(database).then((value) {
+          tasks = value;
+          print(tasks);
+        });
         print('database opened');
       },
     );
@@ -250,5 +257,11 @@ class _HomeLayoutState extends State<HomeLayout> {
         print('error when inserting ${error.toString()}');
       });
     });
+  }
+
+  Future <List<Map>> getDataFromDatabase(database) async
+  {
+     return await database.rawQuery('SELECT * FROM tasks');
+
   }
 }
