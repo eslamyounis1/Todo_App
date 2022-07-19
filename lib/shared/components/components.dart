@@ -6,7 +6,7 @@ Widget defaultFormField({
   required TextEditingController controller,
   required TextInputType type,
   required Function validate,
-  required String lable,
+  required String label,
   bool isObscure = false,
   InputBorder? borderStyle,
   IconData? prefix,
@@ -24,7 +24,7 @@ Widget defaultFormField({
         onTap!();
       },
       decoration: InputDecoration(
-        labelText: lable,
+        labelText: label,
         border: borderStyle,
         suffixIcon: suffix != null
             ? IconButton(
@@ -45,14 +45,14 @@ Widget defaultFormField({
       },
     );
 
-Widget buildTaskItem() => Padding(
+Widget buildTaskItem(Map model) => Padding(
   padding: const EdgeInsets.all(20.0),
   child: Row(
     children: [
-      const CircleAvatar(
+       CircleAvatar(
         radius: 40.0,
         child: Text(
-          '02:00 PM',
+          '${model['time']}',
         ),
       ),
       const SizedBox(
@@ -60,18 +60,19 @@ Widget buildTaskItem() => Padding(
       ),
       Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(
-            'Task Title',
-            style: TextStyle(
+            '${model['title']}',
+            style: const TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
 
             ),
           ),
           Text(
-            '19 Jul, 2022',
-            style: TextStyle(
+            '${model['date']}',
+            style: const TextStyle(
               color: Colors.grey,
 
             ),
