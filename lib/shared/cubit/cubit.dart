@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:untitled3/shared/cubit/states.dart';
@@ -31,9 +32,10 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   late Database database;
+  List<Map> tasks = [];
 
   void createDatabase() {
-     openDatabase(
+    openDatabase(
       'todo.db',
       version: 1,
       onCreate: (database, version) {
@@ -49,6 +51,11 @@ class AppCubit extends Cubit<AppStates> {
         });
       },
       onOpen: (database) {
+        getDataFromDatabase(database).then((value) {
+          tasks = value;
+          print(value);
+          emit(AppGetDatabaseState());
+        });
         print('database opened');
       },
     ).then((value) {
@@ -57,18 +64,22 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-  Future insertDatabase({
+   insertDatabase({
     required String title,
     required String time,
     required String date,
   }) async {
-    return database.transaction((txn) {
-      return txn
-          .rawInsert(
+   await database.transaction((txn) {
+      return txn.rawInsert(
         'INSERT INTO tasks(title,date,time,status) VALUES("$title","$date","$time","new")',
-      )
-          .then((value) {
+      ).then((value) {
         print('$value inserted successfully');
+        emit(AppInsertDatabaseState());
+        getDataFromDatabase(database).then((value) {
+          tasks = value;
+          print(value);
+          emit(AppGetDatabaseState());
+        });
       }).catchError((error) {
         print('error when inserting ${error.toString()}');
       });
@@ -76,6 +87,19 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   Future<List<Map>> getDataFromDatabase(database) async {
+    emit(AppGetDatabaseLoadingState());
     return await database.rawQuery('SELECT * FROM tasks');
+  }
+
+  bool isBottomSheetShown = false;
+  IconData fabIcon = Icons.edit;
+
+  void changBottomSheetState({
+    required bool isShow,
+    required IconData icon,
+  }) {
+    isBottomSheetShown = isShow;
+    fabIcon = icon;
+    emit(AppChangeBottomSheetState());
   }
 }
