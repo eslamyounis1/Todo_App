@@ -82,6 +82,8 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  bool doneCheckBoxShown = true;
+  bool archiveCheckBoxShown = true;
   void getDataFromDatabase(database) {
     newTasks = [];
     doneTasks = [];
@@ -92,10 +94,16 @@ class AppCubit extends Cubit<AppStates> {
       value.forEach((element) {
         if (element['status'] == 'new') {
           newTasks.add(element);
+          doneCheckBoxShown = true;
+          archiveCheckBoxShown = true;
+
         } else if (element['status'] == 'done') {
           doneTasks.add(element);
+          doneCheckBoxShown = false;
+
         } else {
           archivedTasks.add(element);
+          archiveCheckBoxShown = false;
         }
       });
 
@@ -138,6 +146,10 @@ class AppCubit extends Cubit<AppStates> {
     emit(AppChangeBottomSheetState());
   }
 
+  void fun (){
+    getDataFromDatabase(database);
+
+  }
 
 
 }

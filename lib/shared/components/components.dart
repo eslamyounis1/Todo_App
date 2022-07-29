@@ -110,10 +110,11 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 AppCubit.get(context).updateData(
                   status: 'done',
                   id: model['id'],
+
                 );
               },
-              icon: const Icon(
-                Icons.check_box,
+              icon:  Icon(
+               AppCubit.get(context).doneCheckBoxShown ? Icons.check_box : null,
                 color: Colors.green,
               ),
             ),
@@ -124,8 +125,8 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                   id: model['id'],
                 );
               },
-              icon: const Icon(
-                 Icons.archive,
+              icon: Icon(
+                 AppCubit.get(context).archiveCheckBoxShown? Icons.archive : null,
                 color: Colors.black45,
               ),
             ),
