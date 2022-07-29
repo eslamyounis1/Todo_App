@@ -32,7 +32,9 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   late Database database;
-  List<Map> tasks = [];
+  List<Map> newTasks = [];
+  List<Map> doneTasks = [];
+  List<Map> archivedTasks = [];
 
   void createDatabase() {
     openDatabase(
@@ -81,13 +83,21 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   void getDataFromDatabase(database) {
+    newTasks = [];
+    doneTasks = [];
+    archivedTasks = [];
+
     emit(AppGetDatabaseLoadingState());
      database.rawQuery('SELECT * FROM tasks').then((value) {
-       tasks = value;
-       print(value);
 
        value.forEach((element) {
-         print(element['status']);
+        if(element['status'] == 'new') {
+          newTasks.add(element);
+        }else if(element['status'] == 'done'){
+          doneTasks.add(element);
+        }else {
+          archivedTasks.add(element);
+        }
        });
        
        emit(AppGetDatabaseState());
@@ -105,6 +115,8 @@ class AppCubit extends Cubit<AppStates> {
      database.rawUpdate(
         'UPDATE tasks SET status = ? WHERE id = ?',
         [status, id]).then((value){
+
+          getDataFromDatabase(database);
           emit(AppUpdateDatabaseState());
 
      });

@@ -45,7 +45,7 @@ Widget defaultFormField({
       },
     );
 
-Widget buildTaskItem(Map model,context) => Padding(
+Widget buildTaskItem(Map model, context) => Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: [
@@ -96,7 +96,10 @@ Widget buildTaskItem(Map model,context) => Padding(
           ),
           IconButton(
             onPressed: () {
-              AppCubit.get(context).updateData(status: 'archived', id: model['id'],);
+              AppCubit.get(context).updateData(
+                status: 'archived',
+                id: model['id'],
+              );
             },
             icon: const Icon(
               Icons.archive,
