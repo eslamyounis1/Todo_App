@@ -15,7 +15,7 @@ class DoneTasksScreen extends StatelessWidget {
       listener: (context, state){},
       builder: (context,state) {
         var tasks = AppCubit.get(context).doneTasks;
-        return ListView.separated(
+        return tasks.isNotEmpty ? ListView.separated(
           itemBuilder: (context, index) => buildTaskItem(tasks[index],context),
           separatorBuilder: (context, index) => Padding(
             padding: const EdgeInsetsDirectional.only(
@@ -28,7 +28,7 @@ class DoneTasksScreen extends StatelessWidget {
             ),
           ),
           itemCount: tasks.length,
-        );
+        ) : emptyTasksAlert();
       } ,
 
     );
