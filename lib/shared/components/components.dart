@@ -1,6 +1,6 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled3/shared/cubit/cubit.dart';
 
 Widget defaultFormField({
   required TextEditingController controller,
@@ -13,7 +13,7 @@ Widget defaultFormField({
   IconData? suffix,
   Function? suffixPressed,
   Function? onTap,
-  bool isClickable =true,
+  bool isClickable = true,
 }) =>
     TextFormField(
       controller: controller,
@@ -45,40 +45,64 @@ Widget defaultFormField({
       },
     );
 
-Widget buildTaskItem(Map model) => Padding(
-  padding: const EdgeInsets.all(20.0),
-  child: Row(
-    children: [
-       CircleAvatar(
-        radius: 40.0,
-        child: Text(
-          '${model['time']}',
-        ),
-      ),
-      const SizedBox(
-        width: 20.0,
-      ),
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+Widget buildTaskItem(Map model,context) => Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
         children: [
-          Text(
-            '${model['title']}',
-            style: const TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-
+          CircleAvatar(
+            radius: 40.0,
+            child: Text(
+              '${model['time']}',
             ),
           ),
-          Text(
-            '${model['date']}',
-            style: const TextStyle(
-              color: Colors.grey,
-
+          const SizedBox(
+            width: 20.0,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${model['title']}',
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  '${model['date']}',
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 20.0,
+          ),
+          IconButton(
+            onPressed: () {
+              AppCubit.get(context).updateData(
+                status: 'done',
+                id: model['id'],
+              );
+            },
+            icon: const Icon(
+              Icons.check_box,
+              color: Colors.green,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              AppCubit.get(context).updateData(status: 'archived', id: model['id'],);
+            },
+            icon: const Icon(
+              Icons.archive,
+              color: Colors.black45,
             ),
           ),
         ],
       ),
-    ],
-  ),
-);
+    );

@@ -64,15 +64,17 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
-   insertDatabase({
+  insertDatabase({
     required String title,
     required String time,
     required String date,
   }) async {
-   await database.transaction((txn) {
-      return txn.rawInsert(
+    await database.transaction((txn) {
+      return txn
+          .rawInsert(
         'INSERT INTO tasks(title,date,time,status) VALUES("$title","$date","$time","new")',
-      ).then((value) {
+      )
+          .then((value) {
         print('$value inserted successfully');
         emit(AppInsertDatabaseState());
         getDataFromDatabase(database).then((value) {
@@ -93,6 +95,20 @@ class AppCubit extends Cubit<AppStates> {
 
   bool isBottomSheetShown = false;
   IconData fabIcon = Icons.edit;
+
+ void updateData({
+  required String status,
+  required int id,
+
+}) async {
+     database.rawUpdate(
+        'UPDATE tasks SET status = ? WHERE id = ?',
+        [status, id]).then((value){
+          emit(AppUpdateDatabaseState());
+
+     });
+
+  }
 
   void changBottomSheetState({
     required bool isShow,

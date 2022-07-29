@@ -25,3 +25,7 @@ class AppGetDatabaseState extends AppStates{
 class AppChangeBottomSheetState extends AppStates{
 
 }
+
+class AppUpdateDatabaseState extends AppStates{
+
+}
