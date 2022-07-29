@@ -51,11 +51,7 @@ class AppCubit extends Cubit<AppStates> {
         });
       },
       onOpen: (database) {
-        getDataFromDatabase(database).then((value) {
-          tasks = value;
-          print(value);
-          emit(AppGetDatabaseState());
-        });
+        getDataFromDatabase(database);
         print('database opened');
       },
     ).then((value) {
@@ -77,20 +73,25 @@ class AppCubit extends Cubit<AppStates> {
           .then((value) {
         print('$value inserted successfully');
         emit(AppInsertDatabaseState());
-        getDataFromDatabase(database).then((value) {
-          tasks = value;
-          print(value);
-          emit(AppGetDatabaseState());
-        });
+        getDataFromDatabase(database);
       }).catchError((error) {
         print('error when inserting ${error.toString()}');
       });
     });
   }
 
-  Future<List<Map>> getDataFromDatabase(database) async {
+  void getDataFromDatabase(database) {
     emit(AppGetDatabaseLoadingState());
-    return await database.rawQuery('SELECT * FROM tasks');
+     database.rawQuery('SELECT * FROM tasks').then((value) {
+       tasks = value;
+       print(value);
+
+       value.forEach((element) {
+         print(element['status']);
+       });
+       
+       emit(AppGetDatabaseState());
+     });
   }
 
   bool isBottomSheetShown = false;
